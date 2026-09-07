@@ -23,8 +23,8 @@ written yet, and things that are written have been run on the machine.
 - **[hardware/](hardware/)** — the box, the hub, what is plugged into what.
 - **[os.md](os.md)** — the CachyOS/Arch/SteamOS question and where it stands.
 - **[controllers/](controllers/)** — 8BitDo pairing and udev rules.
-- **[power/](power/)** — sleep and wake, and switching controller power off
-  by power-cycling the dongle ports with `uhubctl`.
+- **[power/](power/)** — sleep and wake, and power-cycling the dongle ports
+  with `uhubctl` so the controllers switch themselves off.
 - **[software/](software/)** — what runs on top: Deck Shelves, PC GamePak.
 
 ## The problems this is solving
