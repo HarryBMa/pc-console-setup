@@ -14,7 +14,7 @@ written yet, and things that are written have been run on the machine.
 | OS today | CachyOS |
 | OS wanted | Arch, or SteamOS bare — [why this is not settled](os.md) |
 | Controllers | 4 × 8BitDo Ultimate 2C |
-| USB | Hub with per-port power switching, driven by `uhubctl` |
+| USB | [VirtualHere 4-port hub](https://modularkvmip.com/product/usb-hub/), per-port power switching via `uhubctl` |
 | Display | TODO |
 | Storage | TODO |
 
@@ -24,7 +24,7 @@ written yet, and things that are written have been run on the machine.
 - **[os.md](os.md)** — the CachyOS/Arch/SteamOS question and where it stands.
 - **[controllers/](controllers/)** — 8BitDo pairing and udev rules.
 - **[power/](power/)** — sleep and wake, and switching controller power off
-  with `uhubctl` before suspend.
+  by power-cycling the dongle ports with `uhubctl`.
 - **[software/](software/)** — what runs on top: Deck Shelves, PC GamePak.
 
 ## The problems this is solving
@@ -32,12 +32,11 @@ written yet, and things that are written have been run on the machine.
 Each of these is a real thing that goes wrong on a PC pretending to be a
 console, and each has a page above.
 
-**Controllers that stay awake.** A 2.4 GHz dongle keeps drawing power and can
-wake the box, so the ports get switched off before suspend and back on after
-resume. See [power/](power/).
-
-**Wake-up that does not work from the couch.** A console wakes when you press
-a button on the controller. A PC usually does not. TODO.
+**Controllers that stay awake.** A 2.4 GHz controller keeps draining its own
+battery while the box sleeps. The dongle ports get *power-cycled* before
+suspend: the controllers lose the link and switch themselves off, and the port
+comes straight back so a button press can still wake the machine. See
+[power/](power/).
 
 **A desktop appearing.** Anything that drops to a desktop, a login prompt, or
 a file manager breaks the illusion and needs a keyboard to escape.
