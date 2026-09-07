@@ -1,0 +1,52 @@
+#!/bin/bash
+# Switch the controller dongles off before suspend and back on after resume.
+#
+# Install to /usr/lib/systemd/system-sleep/uhubctl-sleep, chmod 755.
+# systemd runs everything in that directory with two arguments:
+#
+#   $1  pre | post
+#   $2  suspend | hibernate | hybrid-sleep | suspend-then-hibernate
+#
+# Why bother: a 2.4 GHz dongle keeps drawing power with the machine asleep, and
+# on some boards it can wake the box on its own. Cutting port power stops both.
+#
+# Set HUB to the location from `sudo uhubctl` — the string after
+# "Current status for hub", e.g. 1-2 or 3-1.4. PORTS is the comma-separated
+# port list the dongles are in. Both are hardware-specific; there is no sensible
+# default, so this exits rather than guessing.
+
+set -u
+
+HUB="${UHUBCTL_HUB:-}"      # TODO: set, e.g. HUB=1-2
+PORTS="${UHUBCTL_PORTS:-}"  # TODO: set, e.g. PORTS=1,2,3,4
+
+action="${1:-}"
+target="${2:-}"
+
+log() { logger -t uhubctl-sleep "$*"; }
+
+if [ -z "$HUB" ] || [ -z "$PORTS" ]; then
+    log "HUB/PORTS not set, doing nothing (see the comment in this file)"
+    exit 0
+fi
+
+if ! command -v uhubctl >/dev/null 2>&1; then
+    log "uhubctl not installed, doing nothing"
+    exit 0
+fi
+
+case "$action" in
+    pre)
+        log "powering off hub $HUB ports $PORTS before $target"
+        uhubctl -l "$HUB" -p "$PORTS" -a off || log "uhubctl off failed"
+        ;;
+    post)
+        log "powering on hub $HUB ports $PORTS after $target"
+        uhubctl -l "$HUB" -p "$PORTS" -a on || log "uhubctl on failed"
+        # The dongles take a moment to enumerate; without this a controller
+        # pressed immediately after wake can be missed.
+        sleep 1
+        ;;
+esac
+
+exit 0
