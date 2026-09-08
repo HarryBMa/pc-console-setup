@@ -1,0 +1,1 @@
+Todo create a shell for nuc with cartridge 
