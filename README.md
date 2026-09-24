@@ -15,8 +15,8 @@ written yet, and things that are written have been run on the machine.
 | OS wanted | Arch, or SteamOS bare — [why this is not settled](os.md) |
 | Controllers | 4 × 8BitDo Ultimate 2C |
 | USB | [VirtualHere 4-port hub](https://modularkvmip.com/product/usb-hub/), per-port power switching via `uhubctl` |
-| Display | TODO |
-| Storage | TODO |
+| Display | LG CX 55" 4K120 freesync |
+| Storage | NVME |
 
 ## What is here
 
